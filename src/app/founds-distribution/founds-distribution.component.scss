@@ -1,0 +1,53 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+:host {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+
+    h2 {
+        margin-top: 1em;
+    }
+
+    table {
+        min-width: auto;
+
+        tr:has(>td):hover {
+            background-color: map.get(mat.$grey-palette, 800);
+        }
+
+        .mdc-data-table__header-row {
+            background-color: map.get(mat.$grey-palette, 900);
+        }
+
+        .mat-column-percentage {
+            text-align: center;
+        }
+
+        .mat-column-expectedAmount {
+            text-align: right;
+        }
+
+        .mat-column-currentAmount {
+            text-align: right;
+        }
+
+        .mat-column-diff {
+            text-align: right;
+        }
+
+        .red-cell {
+            color: red;
+        }
+
+        .green-cell {
+            color: limegreen;
+        }
+
+        .all-green {
+            background-color: darkgreen;
+        }
+    }
+}

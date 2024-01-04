@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+html,
+body {
+    height: 100%;
+    background-color: map.get(mat.$grey-palette, 800) !important;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

@@ -1,0 +1,32 @@
+<div class="form-container">
+    <mat-form-field>
+        <mat-label>By</mat-label>
+        <mat-select [ngModel]="bySelected" (ngModelChange)="bySelectedChanged($event)">
+            <mat-option [value]="0">Amount</mat-option>
+            <mat-option [value]="1">Percentage</mat-option>
+        </mat-select>
+        <mat-hint></mat-hint>
+    </mat-form-field>
+
+    <investments-form-field-builder [investmentType]="investmentType.fixedIncome" [bySelected]="bySelected"
+        [isExpected]="isExpected" (inputValueChange)="setInvestmentDistribution($event, investmentType.fixedIncome)">
+    </investments-form-field-builder>
+
+    <investments-form-field-builder [investmentType]="investmentType.realState" [bySelected]="bySelected"
+        [isExpected]="isExpected" (inputValueChange)="setInvestmentDistribution($event, investmentType.realState)">
+    </investments-form-field-builder>
+</div>
+
+<div class="form-container">
+    <investments-form-field-builder [investmentType]="investmentType.stockExchange" [bySelected]="bySelected"
+        [isExpected]="isExpected" (inputValueChange)="setInvestmentDistribution($event, investmentType.stockExchange)">
+    </investments-form-field-builder>
+
+    <investments-form-field-builder [investmentType]="investmentType.crypto" [bySelected]="bySelected"
+        [isExpected]="isExpected" (inputValueChange)="setInvestmentDistribution($event, investmentType.crypto)">
+    </investments-form-field-builder>
+
+    <investments-form-field-builder [investmentType]="investmentType.internacional" [bySelected]="bySelected"
+        [isExpected]="isExpected" (inputValueChange)="setInvestmentDistribution($event, investmentType.internacional)">
+    </investments-form-field-builder>
+</div>

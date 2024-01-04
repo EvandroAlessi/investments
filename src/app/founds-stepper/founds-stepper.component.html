@@ -1,0 +1,39 @@
+<mat-stepper orientation="vertical" [linear]="true" (selectionChange)="selectionChanged($event)" #stepper>
+    <mat-step label="Available Founds">
+        <investments-founds></investments-founds>
+        <div class="mat-stepper-navegation">
+            <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+    </mat-step>
+
+    <mat-step disabled label="Current Distribution">
+        <investments-founds-allocation [isExpected]="false"></investments-founds-allocation>
+
+        <div class="mat-stepper-navegation">
+            <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
+            <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+    </mat-step>
+
+    <mat-step label="Expected Distribution">
+        <investments-founds-allocation [isExpected]="true"></investments-founds-allocation>
+
+        <div class="mat-stepper-navegation">
+            <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
+            <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+    </mat-step>
+
+    <mat-step label="Current Vs Expected">
+        <investments-founds-distribution-chart></investments-founds-distribution-chart>
+
+        <div class="mat-stepper-navegation">
+            <button mat-stroked-button color="accent" matStepperPrevious>Back</button>
+            <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+    </mat-step>
+
+    <mat-step label="Result">
+        <investments-founds-distribution></investments-founds-distribution>
+    </mat-step>
+</mat-stepper>
