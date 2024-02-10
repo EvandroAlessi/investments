@@ -7,7 +7,7 @@ export class CurrencyService {
 
   constructor() { }
 
-  formatCurrencyPontuation(dcc: string, amount: number) {
+  formatCurrencyPontuation(amount: number, dcc: string, thousandSeparator = '.', decimalSerapator = ',') {
     const truncAmount = ~~amount;
     const amountString = this.reverseString(truncAmount.toString());
     const thousand: string[] = [];
@@ -39,10 +39,10 @@ export class CurrencyService {
 
     var decimalAmount = Math.abs(amount) - Math.abs(truncAmount);
 
-    const thousandJoined = thousand.reverse().join('.');
+    const thousandJoined = thousand.reverse().join(thousandSeparator);
 
     if (decimalAmount == 0) {
-      return `${dcc} ${thousandJoined}`;
+      return `${dcc} ${thousandJoined}${decimalSerapator}00`;
     }
 
     const decimalAmountString = decimalAmount
@@ -50,7 +50,7 @@ export class CurrencyService {
       .toString()
       .replace('0.', '');
 
-    return `${dcc} ${thousandJoined},${decimalAmountString}`;
+    return `${dcc} ${thousandJoined}${decimalSerapator}${decimalAmountString}`;
   }
 
   private reverseString(str: string): string {

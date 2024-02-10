@@ -1,0 +1,30 @@
+<ng-container *ngIf="bySelected == 0; else showPercentageInput">
+    <mat-form-field floatLabel="always">
+        <mat-label>{{ investmentTypeName }}</mat-label>
+
+        <input matInput currencyMask [ngModel]="investmentDistributionByType" (ngModelChange)="updateInputValue($event)"
+            name='{{investmentType}}' [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text"
+            placeholder="0" onfocus="this.select()">
+
+        <span matTextPrefix>{{ dcc }}&nbsp;</span>
+
+        <mat-hint *ngIf="showHintMessage">
+            {{ hintMessage }}
+        </mat-hint>
+    </mat-form-field>
+</ng-container>
+
+<ng-template #showPercentageInput>
+    <mat-form-field floatLabel="always">
+        <mat-label>{{ investmentTypeName }}</mat-label>
+
+        <input matInput [ngModel]="investmentDistributionByType" (ngModelChange)="updateInputValue($event)"
+            name='{{investmentType}}' type="number" placeholder="0" onfocus="this.select()">
+
+        <span matTextSuffix>%&nbsp;</span>
+
+        <mat-hint *ngIf="showHintMessage">
+            {{ hintMessage }}
+        </mat-hint>
+    </mat-form-field>
+</ng-template>
