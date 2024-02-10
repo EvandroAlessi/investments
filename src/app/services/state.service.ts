@@ -6,44 +6,45 @@ import { DistributedBy } from '../enums/distributed-by.enum';
   providedIn: 'root'
 })
 export class StateService {
-  private _investmentDistribution: InvestmentDistribution = {
-    fixedIncome: 192973.51,
-    realState: 28936.64,
-    stockExchange: 0,
-    crypto: 100.04,
-    internacional: 0,
-    distributedBy: DistributedBy.Amount
-  };
+  // private _investmentDistribution: InvestmentDistribution = {
+  //   fixedIncome: 156082.04,
+  //   realState: 50491.26,
+  //   stockExchange: 9446.23,
+  //   internacional: 0,
+  //   crypto: 160.73,
+  //   distributedBy: DistributedBy.Amount
+  // };
 
-  private _expectedInvestmentDistribution: InvestmentDistribution = {
-    fixedIncome: 50,
-    realState: 20,
-    stockExchange: 20,
-    crypto: 5,
-    internacional: 5,
-    distributedBy: DistributedBy.Percentage
-  };
+  // private _expectedInvestmentDistribution: InvestmentDistribution = {
+  //   fixedIncome: 50,
+  //   realState: 25,
+  //   stockExchange: 15,
+  //   internacional: 5,
+  //   crypto: 5,
+  //   distributedBy: DistributedBy.Percentage
+  // };
 
-  private _amount = 222010.19;
+  private _amount = 216180.26;
   private _dcc = 'R$';
 
   constructor() { }
 
-  get investmentDistribution(): InvestmentDistribution {
-    return this._investmentDistribution;
-  }
+  // get investmentDistribution(): InvestmentDistribution {
+  //   return this._investmentDistribution;
+  // }
 
-  set investmentDistribution(investmentDistribution: InvestmentDistribution) {
-    this._investmentDistribution = investmentDistribution;
-  }
+  // set investmentDistribution(investmentDistribution: InvestmentDistribution) {
+  //   this._investmentDistribution = investmentDistribution;
+  // }
 
-  get expectedInvestmentDistribution(): InvestmentDistribution {
-    return this._expectedInvestmentDistribution;
-  }
+  // get expectedInvestmentDistribution(): InvestmentDistribution {
+  //   return this._expectedInvestmentDistribution;
+  // }
 
-  set expectedInvestmentDistribution(investmentDistribution: InvestmentDistribution) {
-    this._expectedInvestmentDistribution = investmentDistribution;
-  }
+  // set expectedInvestmentDistribution(investmentDistribution: InvestmentDistribution) {
+  //   this._expectedInvestmentDistribution = investmentDistribution;
+  // }
+
   get amount(): number {
     return this._amount;
   }

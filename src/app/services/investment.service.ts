@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { StateService } from './state.service';
 import { InvestmentType } from '../enums/investment-type.enum';
 import { DistributedBy } from '../enums/distributed-by.enum';
+import { InvestmentDistribution } from '../models/investment-distribution.model';
+import { db } from './indexed-db.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +12,11 @@ export class InvestmentService {
 
   constructor(private stateService: StateService) { }
 
-  getMaxInvestmentAvailableByInvestmentType(investmentType: InvestmentType, distributionBy: DistributedBy, isExpected: boolean): number {
-    const currentdistribution = this.getInvestimentDistributionSum(isExpected)
-      - this.getInvestmentDistributionByInvestmentType(isExpected)[investmentType];
+  async getMaxInvestmentAvailableByInvestmentType(investmentType: InvestmentType, distributionBy: DistributedBy, isExpected: boolean): Promise<number> {
+    const investmentDistribution = await this.getInvestmentDistributionByInvestmentType(isExpected);
+
+    const currentdistribution = await this.getInvestimentDistributionSum(isExpected)
+      - investmentDistribution[investmentType];
 
     if (distributionBy == DistributedBy.Percentage) {
       return 100 - currentdistribution;
@@ -21,21 +25,8 @@ export class InvestmentService {
     return this.stateService.amount - currentdistribution;
   }
 
-  clearInvestmentDistribution(isExpected: boolean, distributedBy: DistributedBy) {
-    if (isExpected) {
-      this.stateService.expectedInvestmentDistribution = {
-        fixedIncome: 0,
-        realState: 0,
-        stockExchange: 0,
-        crypto: 0,
-        internacional: 0,
-        distributedBy: distributedBy
-      };
-
-      return;
-    }
-
-    this.stateService.investmentDistribution = {
+  async clearInvestmentDistribution(isExpected: boolean, distributedBy: DistributedBy): Promise<void> {
+    const dsitribution: InvestmentDistribution = {
       fixedIncome: 0,
       realState: 0,
       stockExchange: 0,
@@ -43,26 +34,32 @@ export class InvestmentService {
       internacional: 0,
       distributedBy: distributedBy
     };
+
+    await this.updateInvestmentDistribution(isExpected, dsitribution);
   }
 
-  getInvestimentDistributionSum(isExpected: boolean): number {
-    return this.getInvestmentDistributionByInvestmentType(isExpected)[InvestmentType.fixedIncome]
-      + this.getInvestmentDistributionByInvestmentType(isExpected)[InvestmentType.realState]
-      + this.getInvestmentDistributionByInvestmentType(isExpected)[InvestmentType.stockExchange]
-      + this.getInvestmentDistributionByInvestmentType(isExpected)[InvestmentType.crypto]
-      + this.getInvestmentDistributionByInvestmentType(isExpected)[InvestmentType.internacional];
+  async getInvestimentDistributionSum(isExpected: boolean): Promise<number> {
+    var investmentDistribution = await this.getInvestmentDistributionByInvestmentType(isExpected);
+
+    const sum = investmentDistribution[InvestmentType.fixedIncome]
+      + investmentDistribution[InvestmentType.realState]
+      + investmentDistribution[InvestmentType.stockExchange]
+      + investmentDistribution[InvestmentType.crypto]
+      + investmentDistribution[InvestmentType.internacional];
+
+    return this.toFixedNumber(sum, 2);
   }
 
-  getInvestmentDistribution(isExpected: boolean) {
+  async getInvestmentDistribution(isExpected: boolean): Promise<InvestmentDistribution> {
     if (isExpected) {
-      return this.stateService.expectedInvestmentDistribution;
+      return await this.getExpectedInvestmentDistributionFromDb();
     }
 
-    return this.stateService.investmentDistribution;
+    return await this.getInvestmentDistributionFromDb();
   }
 
-  getInvestmentDistributionByInvestmentType(isExpected: boolean) {
-    let investmentDistribution = this.getInvestmentDistribution(isExpected);
+  async getInvestmentDistributionByInvestmentType(isExpected: boolean) {
+    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
 
     return {
       [InvestmentType.fixedIncome]: investmentDistribution.fixedIncome,
@@ -73,54 +70,39 @@ export class InvestmentService {
     };
   }
 
-  setFixedIncomeInvestmentDistribution(value: number, isExpected: boolean): void {
-    if (isExpected) {
-      this.stateService.expectedInvestmentDistribution.fixedIncome = value;
+  async setFixedIncomeInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+    investmentDistribution.fixedIncome = value;
 
-      return;
-    }
-
-    this.stateService.investmentDistribution.fixedIncome = value;
+    this.updateInvestmentDistribution(isExpected, investmentDistribution);
   }
 
-  setRealStateInvestmentDistribution(value: number, isExpected: boolean): void {
-    if (isExpected) {
-      this.stateService.expectedInvestmentDistribution.realState = value;
+  async setRealStateInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+    investmentDistribution.realState = value;
 
-      return;
-    }
-
-    this.stateService.investmentDistribution.realState = value;
+    this.updateInvestmentDistribution(isExpected, investmentDistribution);
   }
 
-  setStockExchangeInvestmentDistribution(value: number, isExpected: boolean): void {
-    if (isExpected) {
-      this.stateService.expectedInvestmentDistribution.stockExchange = value;
+  async setStockExchangeInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+    investmentDistribution.stockExchange = value;
 
-      return;
-    }
-
-    this.stateService.investmentDistribution.stockExchange = value;
+    this.updateInvestmentDistribution(isExpected, investmentDistribution);
   }
 
-  setCryptoInvestmentDistribution(value: number, isExpected: boolean): void {
-    if (isExpected) {
-      this.stateService.expectedInvestmentDistribution.crypto = value;
+  async setCryptoInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+    investmentDistribution.crypto = value;
 
-      return;
-    }
-
-    this.stateService.investmentDistribution.crypto = value;
+    this.updateInvestmentDistribution(isExpected, investmentDistribution);
   }
 
-  setInternacionalInvestmentDistribution(value: number, isExpected: boolean): void {
-    if (isExpected) {
-      this.stateService.expectedInvestmentDistribution.internacional = value;
+  async setInternacionalInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+    investmentDistribution.internacional = value;
 
-      return;
-    }
-
-    this.stateService.investmentDistribution.internacional = value;
+    this.updateInvestmentDistribution(isExpected, investmentDistribution);
   }
 
   convertToAmout(percentageValue: number): number {
@@ -133,5 +115,29 @@ export class InvestmentService {
     const amount = amountValue / this.stateService.amount * 100;
 
     return ~~amount;
+  }
+
+  private toFixedNumber(num: number, digits: number, base = 10) {
+    const pow = Math.pow(base, digits);
+
+    return Math.round(num * pow) / pow;
+  }
+
+  private async updateInvestmentDistribution(isExpected: boolean, investmentDistribution: InvestmentDistribution) {
+    if (isExpected) {
+      await db.investmentDistribution.update(2, investmentDistribution);
+
+      return;
+    }
+
+    await db.investmentDistribution.update(1, investmentDistribution);
+  }
+
+  private async getInvestmentDistributionFromDb(): Promise<InvestmentDistribution> {
+    return await db.investmentDistribution.get({ id: 1 }) ?? <InvestmentDistribution>{};
+  }
+
+  private async getExpectedInvestmentDistributionFromDb(): Promise<InvestmentDistribution> {
+    return await db.investmentDistribution.get({ id: 2 }) ?? <InvestmentDistribution>{};
   }
 }

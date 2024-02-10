@@ -1,0 +1,18 @@
+:host {
+    display: flex;
+    flex-direction: column;
+
+    .form-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: .8em;
+    }
+
+    .mat-mdc-form-field-type-mat-select,
+    investments-form-field-builder {
+        min-width: 30%;
+    }
+
+
+}

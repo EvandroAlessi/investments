@@ -13,16 +13,17 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FoundsComponent } from './founds/founds.component';
-import { FoundsAllocationComponent } from './founds-allocation/founds-allocation.component';
-import { FoundsDistributionComponent } from './founds-distribution/founds-distribution.component';
-import { FoundsStepperComponent } from './founds-stepper/founds-stepper.component';
+import { FoundsComponent } from './components/founds/founds.component';
+import { FoundsAllocationComponent } from './components/founds-allocation/founds-allocation.component';
+import { FoundsDistributionComponent } from './components/founds-distribution/founds-distribution.component';
+import { FoundsStepperComponent } from './components/founds-stepper/founds-stepper.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatSelectModule } from '@angular/material/select';
-import { FormFieldBuilderComponent } from './form-field-builder/form-field-builder.component';
-import { FoundsDistributionChartComponent } from './founds-distribution-chart/founds-distribution-chart.component';
+import { FormFieldBuilderComponent } from './components/form-field-builder/form-field-builder.component';
+import { FoundsDistributionChartComponent } from './components/founds-distribution-chart/founds-distribution-chart.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { StepperNavegationComponent } from './components/stepper-navegation/stepper-navegation.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     FoundsDistributionComponent,
     FoundsStepperComponent,
     FormFieldBuilderComponent,
-    FoundsDistributionChartComponent
+    FoundsDistributionChartComponent,
+    StepperNavegationComponent
   ],
   imports: [
     CommonModule,

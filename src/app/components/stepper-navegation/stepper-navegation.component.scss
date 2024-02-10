@@ -1,0 +1,10 @@
+:host {
+    .mat-stepper-navegation {
+        display: flex;
+        margin-top: 1em;
+
+        >button:first-child {
+            margin-right: 1em;
+        }
+    }
+}

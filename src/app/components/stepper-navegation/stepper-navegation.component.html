@@ -1,0 +1,6 @@
+<div class="mat-stepper-navegation">
+    <ng-container *ngIf="hasPrevious">
+        <button mat-stroked-button color="accent" matStepperPrevious (click)="previous()">Previous</button>
+    </ng-container>
+    <button mat-stroked-button matStepperNext (click)="next()">Next</button>
+</div>

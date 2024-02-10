@@ -1,0 +1,27 @@
+:host::ng-deep {
+    display: flex;
+
+    .mat-vertical-content,
+    .mat-horizontal-content-container {
+        width: 100%;
+    }
+
+    .mat-vertical-content {
+        padding: 1em;
+    }
+
+    .mat-horizontal-content-container {
+        padding: 1em .5em;
+
+    }
+
+    .mat-vertical-stepper-header-container,
+    .mat-horizontal-stepper-header-container {
+        height: auto;
+    }
+
+    mat-step-header {
+        height: auto;
+        padding: 1em;
+    }
+}
