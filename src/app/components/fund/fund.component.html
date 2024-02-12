@@ -1,0 +1,8 @@
+<mat-form-field floatLabel="always">
+    <mat-label>Founds</mat-label>
+    <input matInput currencyMask [ngModel]="wallet.availableFund" (ngModelChange)="updateWallet($event)"
+        [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text" placeholder="0" onfocus="this.select()"
+        required>
+    <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>
+    <mat-hint></mat-hint>
+</mat-form-field>

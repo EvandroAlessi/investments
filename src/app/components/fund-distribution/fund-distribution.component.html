@@ -1,0 +1,32 @@
+<div class="form-container">
+    <mat-form-field>
+        <mat-label>By</mat-label>
+        <mat-select [ngModel]="distributedBy" (ngModelChange)="distributedByChanged($event)">
+            <mat-option [value]="0">Amount</mat-option>
+            <mat-option [value]="1">Percentage</mat-option>
+        </mat-select>
+        <mat-hint></mat-hint>
+    </mat-form-field>
+
+    <investments-form-field [investmentType]="investmentType.fixedIncome" [distributedBy]="distributedBy"
+        [isInvestmentProjection]="isInvestmentProjection" (hasChanges)="emitChanges()" [updateDetails]="updateInputDetails">
+    </investments-form-field>
+
+    <investments-form-field [investmentType]="investmentType.realState" [distributedBy]="distributedBy"
+        [isInvestmentProjection]="isInvestmentProjection" (hasChanges)="emitChanges()" [updateDetails]="updateInputDetails">
+    </investments-form-field>
+</div>
+
+<div class="form-container">
+    <investments-form-field [investmentType]="investmentType.stockExchange" [distributedBy]="distributedBy"
+        [isInvestmentProjection]="isInvestmentProjection" (hasChanges)="emitChanges()" [updateDetails]="updateInputDetails">
+    </investments-form-field>
+
+    <investments-form-field [investmentType]="investmentType.internacional" [distributedBy]="distributedBy"
+        [isInvestmentProjection]="isInvestmentProjection" (hasChanges)="emitChanges()" [updateDetails]="updateInputDetails">
+    </investments-form-field>
+
+    <investments-form-field [investmentType]="investmentType.crypto" [distributedBy]="distributedBy"
+        [isInvestmentProjection]="isInvestmentProjection" (hasChanges)="emitChanges()" [updateDetails]="updateInputDetails">
+    </investments-form-field>
+</div>

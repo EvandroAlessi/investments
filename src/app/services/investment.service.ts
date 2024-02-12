@@ -1,45 +1,40 @@
 import { Injectable } from '@angular/core';
-import { StateService } from './state.service';
 import { InvestmentType } from '../enums/investment-type.enum';
 import { DistributedBy } from '../enums/distributed-by.enum';
-import { InvestmentDistribution } from '../models/investment-distribution.model';
-import { db } from './indexed-db.service';
+import { Investment } from '../models/investment.model';
+import { db } from '../database/indexed-db';
+import { WalletService } from './wallet.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvestmentService {
 
-  constructor(private stateService: StateService) { }
+  constructor(private walletService: WalletService) { }
 
-  async getMaxInvestmentAvailableByInvestmentType(investmentType: InvestmentType, distributionBy: DistributedBy, isExpected: boolean): Promise<number> {
-    const investmentDistribution = await this.getInvestmentDistributionByInvestmentType(isExpected);
+  async getMaxAvailableInvestmentByType(investmentType: InvestmentType, distributionBy: DistributedBy, isInvestmentProjection: boolean): Promise<number> {
+    const investmentDistribution = await this.getInvestmentByType(isInvestmentProjection);
 
-    const currentdistribution = await this.getInvestimentDistributionSum(isExpected)
+    const currentdistribution = await this.getInvestimentSum(isInvestmentProjection)
       - investmentDistribution[investmentType];
 
     if (distributionBy == DistributedBy.Percentage) {
       return 100 - currentdistribution;
     }
 
-    return this.stateService.amount - currentdistribution;
+    const wallet = await this.walletService.getWallet();
+
+    const maxValue = wallet.availableFund - currentdistribution;
+
+    if (maxValue >= 0) {
+      return maxValue;
+    }
+
+    return 0;
   }
 
-  async clearInvestmentDistribution(isExpected: boolean, distributedBy: DistributedBy): Promise<void> {
-    const dsitribution: InvestmentDistribution = {
-      fixedIncome: 0,
-      realState: 0,
-      stockExchange: 0,
-      crypto: 0,
-      internacional: 0,
-      distributedBy: distributedBy
-    };
-
-    await this.updateInvestmentDistribution(isExpected, dsitribution);
-  }
-
-  async getInvestimentDistributionSum(isExpected: boolean): Promise<number> {
-    var investmentDistribution = await this.getInvestmentDistributionByInvestmentType(isExpected);
+  async getInvestimentSum(isInvestmentProjection: boolean): Promise<number> {
+    var investmentDistribution = await this.getInvestmentByType(isInvestmentProjection);
 
     const sum = investmentDistribution[InvestmentType.fixedIncome]
       + investmentDistribution[InvestmentType.realState]
@@ -50,16 +45,16 @@ export class InvestmentService {
     return this.toFixedNumber(sum, 2);
   }
 
-  async getInvestmentDistribution(isExpected: boolean): Promise<InvestmentDistribution> {
-    if (isExpected) {
-      return await this.getExpectedInvestmentDistributionFromDb();
+  async getInvestment(isInvestmentProjection: boolean): Promise<Investment> {
+    if (isInvestmentProjection) {
+      return await this.getInvestmentProjectionFromDb();
     }
 
-    return await this.getInvestmentDistributionFromDb();
+    return await this.getInvestmentFromDb();
   }
 
-  async getInvestmentDistributionByInvestmentType(isExpected: boolean) {
-    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+  async getInvestmentByType(isInvestmentProjection: boolean) {
+    let investmentDistribution = await this.getInvestment(isInvestmentProjection);
 
     return {
       [InvestmentType.fixedIncome]: investmentDistribution.fixedIncome,
@@ -70,51 +65,69 @@ export class InvestmentService {
     };
   }
 
-  async setFixedIncomeInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
-    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+  async setFixedIncomeInvestment(value: number, isInvestmentProjection: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestment(isInvestmentProjection);
     investmentDistribution.fixedIncome = value;
 
-    this.updateInvestmentDistribution(isExpected, investmentDistribution);
+    await this.updateInvestment(isInvestmentProjection, investmentDistribution);
   }
 
-  async setRealStateInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
-    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+  async setRealStateInvestment(value: number, isInvestmentProjection: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestment(isInvestmentProjection);
     investmentDistribution.realState = value;
 
-    this.updateInvestmentDistribution(isExpected, investmentDistribution);
+    await this.updateInvestment(isInvestmentProjection, investmentDistribution);
   }
 
-  async setStockExchangeInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
-    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+  async setStockExchangeInvestment(value: number, isInvestmentProjection: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestment(isInvestmentProjection);
     investmentDistribution.stockExchange = value;
 
-    this.updateInvestmentDistribution(isExpected, investmentDistribution);
+    await this.updateInvestment(isInvestmentProjection, investmentDistribution);
   }
 
-  async setCryptoInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
-    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+  async setCryptoInvestment(value: number, isInvestmentProjection: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestment(isInvestmentProjection);
     investmentDistribution.crypto = value;
 
-    this.updateInvestmentDistribution(isExpected, investmentDistribution);
+    await this.updateInvestment(isInvestmentProjection, investmentDistribution);
   }
 
-  async setInternacionalInvestmentDistribution(value: number, isExpected: boolean): Promise<void> {
-    let investmentDistribution = await this.getInvestmentDistribution(isExpected);
+  async setInternacionalInvestment(value: number, isInvestmentProjection: boolean): Promise<void> {
+    let investmentDistribution = await this.getInvestment(isInvestmentProjection);
     investmentDistribution.internacional = value;
 
-    this.updateInvestmentDistribution(isExpected, investmentDistribution);
+    await this.updateInvestment(isInvestmentProjection, investmentDistribution);
   }
 
-  convertToAmout(percentageValue: number): number {
-    const amount = percentageValue * this.stateService.amount / 100;
+  async updateInvestment(isInvestmentProjection: boolean, investmentDistribution: Investment) {
+    if (isInvestmentProjection) {
+      await db.investments.update(2, investmentDistribution);
 
-    return ~~amount;
+      return;
+    }
+
+    await db.investments.update(1, investmentDistribution);
   }
 
-  convertToPercentage(amountValue: number): number {
-    const amount = amountValue / this.stateService.amount * 100;
+  async convertAvailableFundToAmout(percentageValue: number, shouldRoundValue: boolean): Promise<number> {
+    const wallet = await this.walletService.getWallet();
 
-    return ~~amount;
+    const amount = percentageValue * wallet.availableFund / 100;
+
+    if (shouldRoundValue) {
+      return ~~amount;
+    }
+
+    return amount;
+  }
+
+  async convertAvailableToPercentage(amountValue: number): Promise<number> {
+    const wallet = await this.walletService.getWallet();
+
+    const percentage = amountValue / wallet.availableFund * 100;
+
+    return ~~percentage;
   }
 
   private toFixedNumber(num: number, digits: number, base = 10) {
@@ -123,21 +136,13 @@ export class InvestmentService {
     return Math.round(num * pow) / pow;
   }
 
-  private async updateInvestmentDistribution(isExpected: boolean, investmentDistribution: InvestmentDistribution) {
-    if (isExpected) {
-      await db.investmentDistribution.update(2, investmentDistribution);
-
-      return;
-    }
-
-    await db.investmentDistribution.update(1, investmentDistribution);
+  private async getInvestmentFromDb(): Promise<Investment> {
+    return await db.investments.get({ id: 1 })
+      ?? <Investment>{ distributedBy: DistributedBy.Amount };
   }
 
-  private async getInvestmentDistributionFromDb(): Promise<InvestmentDistribution> {
-    return await db.investmentDistribution.get({ id: 1 }) ?? <InvestmentDistribution>{};
-  }
-
-  private async getExpectedInvestmentDistributionFromDb(): Promise<InvestmentDistribution> {
-    return await db.investmentDistribution.get({ id: 2 }) ?? <InvestmentDistribution>{};
+  private async getInvestmentProjectionFromDb(): Promise<Investment> {
+    return await db.investments.get({ id: 2 })
+      ?? <Investment>{ distributedBy: DistributedBy.Percentage };
   }
 }

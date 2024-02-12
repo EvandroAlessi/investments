@@ -1,0 +1,30 @@
+<mat-stepper orientation="horizontal" [linear]="true" (selectionChange)="selectionChanged($event)" #stepper>
+    <mat-step [completed]="isFirstStepNextEnable" label="Available Founds">
+        <investments-fund (isWalletFulfilled)="checkFirstStep($event)"></investments-fund>
+
+        <investments-stepper-navegation [hasPrevious]="false" (nextClick)="firstStepNextClick()">
+        </investments-stepper-navegation>
+    </mat-step>
+
+    <mat-step [completed]="isSecondStepCompleted" label="Current Distribution">
+        <investments-fund-distribution [isInvestmentProjection]="false" (hasChanges)="checkSecondStep()"></investments-fund-distribution>
+
+        <investments-stepper-navegation (nextClick)="secondStepNextClick()"></investments-stepper-navegation>
+    </mat-step>
+
+    <mat-step [completed]="isThirdStepCompleted" label="Expected Distribution">
+        <investments-fund-distribution [isInvestmentProjection]="true" (hasChanges)="checkThirdStep()"></investments-fund-distribution>
+
+        <investments-stepper-navegation (nextClick)="thirdStepNextClick()"></investments-stepper-navegation>
+    </mat-step>
+
+    <mat-step [completed]="isFourthStepCompleted" [editable]="true" label="Current Vs Expected">
+        <investments-fund-distribution-chart></investments-fund-distribution-chart>
+
+        <investments-stepper-navegation></investments-stepper-navegation>
+    </mat-step>
+
+    <mat-step [completed]="isFifthStepCompleted" [editable]="false" label="Result">
+        <investments-fund-distribution-table></investments-fund-distribution-table>
+    </mat-step>
+</mat-stepper>
