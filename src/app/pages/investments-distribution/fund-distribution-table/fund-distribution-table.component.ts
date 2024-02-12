@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { InvestmentType } from '../../enums/investment-type.enum';
+import { InvestmentType } from '../../../enums/investment-type.enum';
 import { MatSort } from '@angular/material/sort';
-import { INVESTMENT_TYPE_NAME } from '../../consts/investment-name.const';
-import { InvestmentService } from '../../services/investment.service';
-import { CurrencyService } from '../../services/currency.service';
-import { DistributedBy } from '../../enums/distributed-by.enum';
+import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { InvestmentService } from '../../../services/investment.service';
+import { CurrencyService } from '../../../services/currency.service';
+import { DistributedBy } from '../../../enums/distributed-by.enum';
 import { WalletService } from 'src/app/services/wallet.service';
 import { Wallet } from 'src/app/models/wallet.model';
 import { Investment } from 'src/app/models/investment.model';
@@ -15,7 +15,7 @@ import { Investment } from 'src/app/models/investment.model';
   templateUrl: './fund-distribution-table.component.html',
   styleUrls: ['./fund-distribution-table.component.scss']
 })
-export class FoundsDistributionComponent implements OnInit {
+export class FundsDistributionTableComponent implements OnInit {
   isDataLoaded = false;
 
   wallet!: Wallet;

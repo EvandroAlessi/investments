@@ -1,9 +1,10 @@
 :host::ng-deep {
     display: flex;
+    padding: 1em 2em;
 
     .mat-vertical-content,
     .mat-horizontal-content-container {
-        width: 100%;
+        width: 99%;
     }
 
     .mat-vertical-content {
@@ -18,6 +19,10 @@
     .mat-vertical-stepper-header-container,
     .mat-horizontal-stepper-header-container {
         height: auto;
+    }
+
+    mat-stepper {
+        width: 100%;
     }
 
     mat-step-header {

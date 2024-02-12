@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FoundsDistributionChartComponent } from './fund-distribution-chart.component';
+import { FundsDistributionChartComponent } from './fund-distribution-chart.component';
 
 describe('FoundsDistributionChartComponent', () => {
-  let component: FoundsDistributionChartComponent;
-  let fixture: ComponentFixture<FoundsDistributionChartComponent>;
+  let component: FundsDistributionChartComponent;
+  let fixture: ComponentFixture<FundsDistributionChartComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FoundsDistributionChartComponent]
+      declarations: [FundsDistributionChartComponent]
     });
-    fixture = TestBed.createComponent(FoundsDistributionChartComponent);
+    fixture = TestBed.createComponent(FundsDistributionChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

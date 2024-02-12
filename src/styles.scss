@@ -11,3 +11,9 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.mat-stepper-vertical,
+.mat-stepper-horizontal {
+    background-color: transparent !important;
+
+}

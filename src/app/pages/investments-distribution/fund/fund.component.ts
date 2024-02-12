@@ -7,7 +7,7 @@ import { Wallet } from 'src/app/models/wallet.model';
   templateUrl: './fund.component.html',
   styleUrls: ['./fund.component.scss']
 })
-export class FoundsComponent implements OnInit {
+export class FundComponent implements OnInit {
   wallet: Wallet = {
     availableFund: 0,
     dcc: 'R$'

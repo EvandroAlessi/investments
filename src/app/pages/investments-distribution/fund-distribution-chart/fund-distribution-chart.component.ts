@@ -13,12 +13,12 @@ import {
   ApexLegend,
   ChartType
 } from "ng-apexcharts";
-import { INVESTMENT_TYPE_NAME } from '../../consts/investment-name.const';
-import { InvestmentType } from '../../enums/investment-type.enum';
-import { DistributedBy } from '../../enums/distributed-by.enum';
-import { InvestmentService } from '../../services/investment.service';
-import { Investment } from '../../models/investment.model';
-import { SynchronyService } from '../../services/synchrony.service';
+import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { InvestmentType } from '../../../enums/investment-type.enum';
+import { DistributedBy } from '../../../enums/distributed-by.enum';
+import { InvestmentService } from '../../../services/investment.service';
+import { Investment } from '../../../models/investment.model';
+import { SynchronyService } from '../../../services/synchrony.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -39,7 +39,7 @@ export type ChartOptions = {
   templateUrl: './fund-distribution-chart.component.html',
   styleUrls: ['./fund-distribution-chart.component.scss']
 })
-export class FoundsDistributionChartComponent implements OnInit, AfterContentInit {
+export class FundsDistributionChartComponent implements OnInit, AfterContentInit {
   @ViewChild("chart") chart!: ChartComponent;
 
   chartOptions: ChartOptions | undefined;
@@ -112,7 +112,7 @@ export class FoundsDistributionChartComponent implements OnInit, AfterContentIni
         },
         toolbar: {
           show: true,
-          offsetX: 12,
+          offsetX: 0,
           tools: {
             zoom: false,
             zoomin: false,

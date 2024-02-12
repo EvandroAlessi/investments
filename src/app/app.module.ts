@@ -13,27 +13,28 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FoundsComponent } from './components/fund/fund.component';
-import { FoundsAllocationComponent } from './components/fund-distribution/fund-distribution.component';
-import { FoundsDistributionComponent } from './components/fund-distribution-table/fund-distribution-table.component';
-import { FoundsStepperComponent } from './components/fund-stepper/found-stepper.component';
+import { FundComponent } from './pages/investments-distribution/fund/fund.component';
+import { FundDistributionComponent } from './pages/investments-distribution/fund-distribution/fund-distribution.component';
+import { FundsDistributionTableComponent } from './pages/investments-distribution/fund-distribution-table/fund-distribution-table.component';
+import { InvestmentsDistributionComponent } from './pages/investments-distribution/investments-distribution.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatSelectModule } from '@angular/material/select';
-import { FormFieldBuilderComponent } from './components/form-field/form-field.component';
-import { FoundsDistributionChartComponent } from './components/fund-distribution-chart/fund-distribution-chart.component';
+import { FormFieldComponent } from './pages/investments-distribution/form-field/form-field.component';
+import { FundsDistributionChartComponent } from './pages/investments-distribution/fund-distribution-chart/fund-distribution-chart.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { StepperNavegationComponent } from './components/stepper-navegation/stepper-navegation.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FoundsComponent,
-    FoundsAllocationComponent,
-    FoundsDistributionComponent,
-    FoundsStepperComponent,
-    FormFieldBuilderComponent,
-    FoundsDistributionChartComponent,
+    FundComponent,
+    FundDistributionComponent,
+    FundsDistributionTableComponent,
+    InvestmentsDistributionComponent,
+    FormFieldComponent,
+    FundsDistributionChartComponent,
     StepperNavegationComponent
   ],
   imports: [
@@ -51,7 +52,8 @@ import { StepperNavegationComponent } from './components/stepper-navegation/step
     MatSnackBarModule,
     MatStepperModule,
     MatSelectModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    NavBarComponent
   ],
   providers: [
     {

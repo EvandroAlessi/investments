@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FoundsDistributionComponent } from './fund-distribution-table.component';
+import { FundsDistributionTableComponent } from './fund-distribution-table.component';
 
 describe('FoundsDistributionComponent', () => {
-  let component: FoundsDistributionComponent;
-  let fixture: ComponentFixture<FoundsDistributionComponent>;
+  let component: FundsDistributionTableComponent;
+  let fixture: ComponentFixture<FundsDistributionTableComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FoundsDistributionComponent]
+      declarations: [FundsDistributionTableComponent]
     });
-    fixture = TestBed.createComponent(FoundsDistributionComponent);
+    fixture = TestBed.createComponent(FundsDistributionTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

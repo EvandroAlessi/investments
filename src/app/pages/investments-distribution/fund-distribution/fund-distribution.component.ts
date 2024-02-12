@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InvestmentType } from '../../enums/investment-type.enum';
-import { INVESTMENT_TYPE_NAME } from '../../consts/investment-name.const';
-import { InvestmentService } from '../../services/investment.service';
-import { DistributedBy } from '../../enums/distributed-by.enum';
+import { InvestmentType } from '../../../enums/investment-type.enum';
+import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { InvestmentService } from '../../../services/investment.service';
+import { DistributedBy } from '../../../enums/distributed-by.enum';
 import { Subject } from 'rxjs';
 import { Investment } from 'src/app/models/investment.model';
 
@@ -11,7 +11,7 @@ import { Investment } from 'src/app/models/investment.model';
   templateUrl: './fund-distribution.component.html',
   styleUrls: ['./fund-distribution.component.scss']
 })
-export class FoundsAllocationComponent implements OnInit {
+export class FundDistributionComponent implements OnInit {
   investmentType = InvestmentType;
   INVESTMENT_NAME = INVESTMENT_TYPE_NAME;
   distributedBy = DistributedBy.Amount;

@@ -8,11 +8,11 @@ import { CurrencyService } from '../../services/currency.service';
 import { WalletService } from 'src/app/services/wallet.service';
 
 @Component({
-  selector: 'investments-found-stepper',
-  templateUrl: './found-stepper.component.html',
-  styleUrls: ['./found-stepper.component.scss']
+  selector: 'investments-distribution',
+  templateUrl: './investments-distribution.component.html',
+  styleUrls: ['./investments-distribution.component.scss']
 })
-export class FoundsStepperComponent {
+export class InvestmentsDistributionComponent {
   isFirstStepNextEnable = false;
   isSecondStepCompleted = false;
   isThirdStepCompleted = false;
