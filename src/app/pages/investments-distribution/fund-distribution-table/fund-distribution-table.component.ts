@@ -9,6 +9,7 @@ import { DistributedBy } from '../../../enums/distributed-by.enum';
 import { WalletService } from 'src/app/services/wallet.service';
 import { Wallet } from 'src/app/models/wallet.model';
 import { Investment } from 'src/app/models/investment.model';
+import { SynchronyService } from 'src/app/services/synchrony.service';
 
 @Component({
   selector: 'investments-fund-distribution-table',
@@ -26,10 +27,14 @@ export class FundsDistributionTableComponent implements OnInit {
 
   constructor(private walletService: WalletService,
     private investmentService: InvestmentService,
-    private currencyService: CurrencyService) { }
+    private currencyService: CurrencyService,
+    private synchronyService: SynchronyService) { }
 
-  async ngOnInit(): Promise<void> {
-    await this.loadTableData();
+  ngOnInit(): void {
+    this.synchronyService.investmentTableUpdated()
+      .subscribe(async () => {
+        await this.loadTableData();
+      });
   }
 
   async loadTableData(): Promise<void> {

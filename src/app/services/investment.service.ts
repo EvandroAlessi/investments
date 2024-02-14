@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { InvestmentType } from '../enums/investment-type.enum';
 import { DistributedBy } from '../enums/distributed-by.enum';
 import { Investment } from '../models/investment.model';
-import { db } from '../database/indexed-db';
+import { INDEXED_DB } from '../database/indexed-db';
 import { WalletService } from './wallet.service';
 
 @Injectable({
@@ -102,12 +102,12 @@ export class InvestmentService {
 
   async updateInvestment(isInvestmentProjection: boolean, investmentDistribution: Investment) {
     if (isInvestmentProjection) {
-      await db.investments.update(2, investmentDistribution);
+      await INDEXED_DB.investments.update(2, investmentDistribution);
 
       return;
     }
 
-    await db.investments.update(1, investmentDistribution);
+    await INDEXED_DB.investments.update(1, investmentDistribution);
   }
 
   async convertAvailableFundToAmout(percentageValue: number, shouldRoundValue: boolean): Promise<number> {
@@ -127,6 +127,10 @@ export class InvestmentService {
 
     const percentage = amountValue / wallet.availableFund * 100;
 
+    if (percentage > 100) {
+      return 100;
+    }
+
     return ~~percentage;
   }
 
@@ -137,12 +141,12 @@ export class InvestmentService {
   }
 
   private async getInvestmentFromDb(): Promise<Investment> {
-    return await db.investments.get({ id: 1 })
+    return await INDEXED_DB.investments.get({ id: 1 })
       ?? <Investment>{ distributedBy: DistributedBy.Amount };
   }
 
   private async getInvestmentProjectionFromDb(): Promise<Investment> {
-    return await db.investments.get({ id: 2 })
+    return await INDEXED_DB.investments.get({ id: 2 })
       ?? <Investment>{ distributedBy: DistributedBy.Percentage };
   }
 }

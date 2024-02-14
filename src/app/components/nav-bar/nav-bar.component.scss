@@ -1,4 +1,24 @@
-:host {
+$primary-color: #c2185b;
+
+:host::ng-deep {
+    mat-sidenav {
+        width: 240px;
+    }
+
+    .mat-drawer-side {
+        border: unset;
+    }
+
+    mat-sidenav-content {
+        padding: 2em 2em;
+    }
+
+    .title-container {
+        width: 224px;
+        display: inline-flex;
+        align-items: center;
+    }
+
     .page-container {
         display: flex;
         flex-direction: column;
@@ -9,11 +29,81 @@
         right: 0;
     }
 
+    .breadcrumb {
+        margin: 0;
+        font-size: medium;
+        color: $primary-color;
+    }
+
     h1.app-name {
         margin-left: 8px;
     }
 
     .sidenav-container {
         flex: 1;
+    }
+
+    .mdc-list {
+        padding: 0;
+    }
+
+    .mat-mdc-list-item-unscoped-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-item:hover::before,
+    .nav-item:focus::before {
+        background-color: unset;
+        opacity: unset;
+    }
+
+    .menu-button:hover {
+        color: $primary-color;
+    }
+
+    .nav-item,
+    .nav-item {
+
+        &:hover,
+        &:focus {
+            background-color: #303030;
+            opacity: unset;
+        }
+
+        &:hover {
+            border: .01em solid gray;
+        }
+    }
+
+    .nav-item-selected {
+        background-color: #303030;
+        opacity: unset;
+
+        .nav-title,
+        .nav-icon {
+            color: $primary-color;
+            font-weight: 500;
+        }
+    }
+
+    .nav-icon {
+        margin-right: .5em;
+    }
+
+    .mat-mdc-list-item:last-child {
+        position: absolute;
+        bottom: 0;
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-title,
+        .nav-icon {
+            color: red;
+
+        }
     }
 }

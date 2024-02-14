@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { WalletService } from 'src/app/services/wallet.service';
 import { Wallet } from 'src/app/models/wallet.model';
+import { SynchronyService } from 'src/app/services/synchrony.service';
 
 @Component({
   selector: 'investments-fund',
@@ -16,7 +17,8 @@ export class FundComponent implements OnInit {
   @Output()
   isWalletFulfilled = new EventEmitter<boolean>();
 
-  constructor(private walletService: WalletService) { }
+  constructor(private walletService: WalletService,
+    private synchronyService: SynchronyService) { }
 
   async ngOnInit(): Promise<void> {
     this.wallet = await this.walletService.getWallet();
@@ -34,5 +36,7 @@ export class FundComponent implements OnInit {
 
   private emitWalletStatus() {
     this.isWalletFulfilled.emit(this.wallet.availableFund > 0);
+
+    this.synchronyService.updateInvestmentTable();
   }
 }

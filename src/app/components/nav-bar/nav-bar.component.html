@@ -1,17 +1,28 @@
 <div class="page-container">
-    <mat-toolbar color="secondary" class="toolbar">
-        <button mat-icon-button (click)="snav.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <h1 class="app-name">Investments</h1>
+    <mat-toolbar class="toolbar">
+        <span class="title-container">
+            <button class="menu-button" mat-icon-button  matTooltip="Show/Hide Sidebar" (click)="snav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <h1 class="app-name">Investments</h1>
+        </span>
+
+        @if (currentNavegationTitle) {
+            <h2 class="breadcrumb" [innerHTML]="currentNavegationTitle"></h2>
+        }
     </mat-toolbar>
 
+    <mat-progress-bar *ngIf="$isLoadingContent | async" mode="indeterminate"></mat-progress-bar>
+
     <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="false" fixedTopGap="56">
+        <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="false" fixedTopGap="56" [opened]="true">
             <mat-nav-list>
-                @for (nav of fillerNav; track nav) {
-                    <a mat-list-item [routerLink]="nav.link">
-                        {{nav.text}}
+                @for (nav of navItems; track nav) {
+                    <a class="nav-item" [ngClass]="{'nav-item-selected': nav.selected}" mat-list-item
+                        [routerLink]="nav.link">
+                        <mat-icon class="nav-icon" aria-hidden="false" [ariaLabel]="nav.title" [fontIcon]="nav.icon" inline>
+                        </mat-icon>
+                        <span class="nav-title">{{nav.title}}</span>
                     </a>
                 }
             </mat-nav-list>

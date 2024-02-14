@@ -5,15 +5,34 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class SynchronyService {
-  updateChartSubject = new Subject<boolean>();
+  loadingContentSubject = new Subject<boolean>();
+
+  investmentChartSubject = new Subject<boolean>();
+  investmentTableSubject = new Subject<boolean>();
 
   constructor() { }
 
-  updateChartChannel(): Observable<boolean> {
-    return this.updateChartSubject.asObservable();
+  investmentChartUpdated(): Observable<boolean> {
+    return this.investmentChartSubject.asObservable();
   }
 
-  updateChart(): void {
-    this.updateChartSubject.next(true);
+  updateInvestmentChart(): void {
+    this.investmentChartSubject.next(true);
+  }
+
+  investmentTableUpdated(): Observable<boolean> {
+    return this.investmentTableSubject.asObservable();
+  }
+
+  updateInvestmentTable(): void {
+    this.investmentTableSubject.next(true);
+  }
+
+  isLoadingContent(): Observable<boolean> {
+    return this.loadingContentSubject.asObservable();
+  }
+
+  setIsLoadingContent(isLoading: boolean): void {
+    this.loadingContentSubject.next(isLoading);
   }
 }

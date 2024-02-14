@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { SynchronyService } from '../../services/synchrony.service';
 import { SnackBarService } from '../../services/snack-bar.service';
@@ -12,7 +12,7 @@ import { WalletService } from 'src/app/services/wallet.service';
   templateUrl: './investments-distribution.component.html',
   styleUrls: ['./investments-distribution.component.scss']
 })
-export class InvestmentsDistributionComponent {
+export class InvestmentsDistributionComponent implements AfterViewInit {
   isFirstStepNextEnable = false;
   isSecondStepCompleted = false;
   isThirdStepCompleted = false;
@@ -32,12 +32,18 @@ export class InvestmentsDistributionComponent {
     private currencyService: CurrencyService,
     private changeDetectorRef: ChangeDetectorRef) { }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.synchronyService.setIsLoadingContent(false);
+    }, 700);
+  }
+
   selectionChanged(event: StepperSelectionEvent): void {
     if (event.selectedIndex != 3) {
       return;
     }
 
-    this.synchronyService.updateChart();
+    this.synchronyService.updateInvestmentChart();
   }
 
   firstStepNextClick(): void {

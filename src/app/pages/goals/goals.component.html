@@ -1,0 +1,72 @@
+<mat-accordion *ngIf="goals">
+    @for (goal of goals; track goal) {
+    <mat-expansion-panel class="goals-expansion-panel" [class.is-goal-completed]="goal.completed"
+        [expanded]="isEditing(goal.id)">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{ goal.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+                {{ goal.description }}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field *ngIf="isEditing(goal.id)">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Goal Name" [(ngModel)]="goal.name" autofocus>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isEditing(goal.id)">
+            <mat-label>Description</mat-label>
+            <input matInput placeholder="Goal Description" [(ngModel)]="goal.description">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Total Cost</mat-label>
+            <input matInput currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text"
+                [disabled]="!isEditing(goal.id)" matInput placeholder="0" [(ngModel)]="goal.totalCost">
+
+            <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Current Amount</mat-label>
+            <input matInput currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text"
+                [disabled]="!isEditing(goal.id)" matInput placeholder="0" [(ngModel)]="goal.currentAmount">
+
+            <span matTextPrefix [ariaDisabled]="true">{{ wallet.dcc }}&nbsp;</span>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input [disabled]="!isEditing(goal.id)" matInput [matDatepicker]="startDatePicker"
+                [(ngModel)]="goal.startDate">
+            <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Dead Line</mat-label>
+            <input [disabled]="!isEditing(goal.id)" matInput [matDatepicker]="deadLinePicker"
+                [(ngModel)]="goal.deadLine">
+            <mat-datepicker-toggle matIconSuffix [for]="deadLinePicker"></mat-datepicker-toggle>
+            <mat-datepicker #deadLinePicker></mat-datepicker>
+        </mat-form-field>
+
+        @if (isEditing(goal.id)) {
+        <button mat-mini-fab matTooltip="Save Goal Details" class="save-goal" (click)="saveGoal(goal)">
+            <mat-icon>check</mat-icon>
+        </button>
+        } @else {
+        <button mat-mini-fab matTooltip="Edit Goal Details" color="primary" (click)="enableGoalEditing(goal.id)">
+            <mat-icon>edit</mat-icon>
+        </button>
+        }
+
+    </mat-expansion-panel>
+    }
+</mat-accordion>
+
+<button mat-fab color="primary" matTooltip="Create Goal" class="create-goal" (click)="createGoal()">
+    <mat-icon>add</mat-icon>
+</button>

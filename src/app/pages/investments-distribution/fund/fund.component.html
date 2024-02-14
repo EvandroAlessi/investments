@@ -1,5 +1,5 @@
 <mat-form-field floatLabel="always">
-    <mat-label>Founds</mat-label>
+    <mat-label>Funds</mat-label>
     <input matInput currencyMask [ngModel]="wallet.availableFund" (ngModelChange)="updateWallet($event)"
         [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text" placeholder="0" onfocus="this.select()"
         required>

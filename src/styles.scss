@@ -1,19 +1,19 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
+
 html,
 body {
     height: 100%;
-    background-color: map.get(mat.$grey-palette, 800) !important;
-}
-
-body {
     margin: 0;
+    background-color: map.get(mat.$grey-palette, 800) !important;
     font-family: Roboto, "Helvetica Neue", sans-serif;
-}
 
-.mat-stepper-vertical,
-.mat-stepper-horizontal {
-    background-color: transparent !important;
+    button {
+        cursor: pointer;
+    }
 
+    .mdc-text-field--disabled .mat-mdc-form-field-text-prefix {
+        color: gray;
+    }
 }

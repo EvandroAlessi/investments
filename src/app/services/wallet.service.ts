@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { db } from '../database/indexed-db';
+import { INDEXED_DB } from '../database/indexed-db';
 import { Wallet } from '../models/wallet.model';
 
 @Injectable({
@@ -10,11 +10,11 @@ export class WalletService {
   constructor() { }
 
   async getWallet(): Promise<Wallet> {
-    return await db.wallets.get({ id: 1 })
+    return await INDEXED_DB.wallets.get({ id: 1 })
       ?? <Wallet>{};
   }
 
   async updateWallet(wallet: Wallet): Promise<void>{
-    await db.wallets.update(1 , wallet);
+    await INDEXED_DB.wallets.update(1 , wallet);
   }
 }

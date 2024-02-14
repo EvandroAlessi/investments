@@ -1,0 +1,45 @@
+:host::ng-deep {
+    .mat-expansion-panel-body {
+        display: flex;
+        justify-content: space-around;
+        align-items: baseline;
+    }
+
+    .save-goal {
+        background-color: green;
+        color: white;
+    }
+
+    .create-goal {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        margin: 2em;
+    }
+
+    .goals-expansion-panel {
+        border-left: .5em solid #E34234;
+
+        &.is-goal-completed {
+            animation: border-loading both 3s;
+            border: 0.01em solid transparent;
+            border-left: .5em solid green;
+        }
+    }
+
+
+}
+
+@keyframes border-loading {
+    0% {
+        border-top: 0.01em solid green;
+    }
+
+    33% {
+        border-right: 0.01em solid green;
+    }
+
+    66% {
+        border-bottom: 0.01em solid green;
+    }
+}

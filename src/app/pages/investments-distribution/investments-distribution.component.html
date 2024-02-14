@@ -1,5 +1,5 @@
 <mat-stepper orientation="horizontal" [linear]="true" (selectionChange)="selectionChanged($event)" #stepper>
-    <mat-step [completed]="isFirstStepNextEnable" label="Available Founds">
+    <mat-step [completed]="isFirstStepNextEnable" label="Available Funds">
         <investments-fund (isWalletFulfilled)="checkFirstStep($event)"></investments-fund>
 
         <investments-stepper-navegation [hasPrevious]="false" (nextClick)="firstStepNextClick()">

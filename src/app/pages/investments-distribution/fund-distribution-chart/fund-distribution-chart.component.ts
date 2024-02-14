@@ -52,7 +52,7 @@ export class FundsDistributionChartComponent implements OnInit, AfterContentInit
 
   ngOnInit(): void {
     this.synchronyService
-      .updateChartChannel()
+      .investmentChartUpdated()
       .subscribe(async () => await this.buildChart());
   }
 
