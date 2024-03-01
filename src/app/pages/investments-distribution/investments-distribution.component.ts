@@ -68,6 +68,9 @@ export class InvestmentsDistributionComponent implements AfterViewInit {
 
   async thirdStepNextClick(): Promise<void> {
     if (this.isThirdStepCompleted) {
+      this.synchronyService.updateInvestmentChart();
+      this.synchronyService.updateInvestmentTable();
+
       return;
     }
 

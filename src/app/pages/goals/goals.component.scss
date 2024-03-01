@@ -1,13 +1,8 @@
 :host::ng-deep {
-    .mat-expansion-panel-body {
-        display: flex;
-        justify-content: space-around;
-        align-items: baseline;
-    }
 
-    .save-goal {
-        background-color: green;
-        color: white;
+    .save-goal,
+    .save-transaction {
+        color: green;
     }
 
     .create-goal {
@@ -17,29 +12,95 @@
         margin: 2em;
     }
 
-    .goals-expansion-panel {
-        border-left: .5em solid #E34234;
-
-        &.is-goal-completed {
-            animation: border-loading both 3s;
-            border: 0.01em solid transparent;
-            border-left: .5em solid green;
-        }
+    .transaction-section {
+        display: flex;
     }
 
+    .goal-expansion-panel {
+        &.is-goal-completed {
+            animation: border-loading-goal-completed both 3s;
+            border: 0.01em solid transparent;
+            border-left: .3em solid green;
+        }
 
+        &:not(.is-goal-completed) {
+            animation: border-loading-goal-pending both 3s;
+            border: 0.01em solid transparent;
+        }
+
+        .mat-expansion-panel-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .goal-progress {
+            margin-bottom: 1em;
+
+            .mdc-linear-progress__bar-inner {
+                border-color: green;
+            }
+
+            .mdc-linear-progress__buffer-dots {
+                background-color: green;
+            }
+        }
+
+        .goal-expansion-panel-body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: baseline;
+
+            .goal-fields {
+                display: flex;
+                align-items: center;
+                flex-grow: 1;
+                justify-content: space-between;
+            }
+
+            .goal-actions {
+                margin-left: 1em;
+            }
+        }
+    }
 }
 
-@keyframes border-loading {
+@keyframes border-loading-goal-completed {
     0% {
         border-top: 0.01em solid green;
+        border-left: .3em solid green;
     }
 
     33% {
         border-right: 0.01em solid green;
+        border-left: .3em solid green;
     }
 
     66% {
         border-bottom: 0.01em solid green;
+        border-left: .3em solid green;
+    }
+
+    99% {
+        border-left: 0.01em solid green;
+        border-left: .3em solid green;
+    }
+}
+
+@keyframes border-loading-goal-pending {
+    0% {
+        border-top: 0.01em solid #E34234;
+    }
+
+    33% {
+        border-right: 0.01em solid #E34234;
+    }
+
+    66% {
+        border-bottom: 0.01em solid #E34234;
+    }
+
+    99% {
+        border-left: 0.01em solid #E34234;
     }
 }

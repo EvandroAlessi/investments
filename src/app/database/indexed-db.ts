@@ -3,6 +3,7 @@ import { Investment } from '../models/investment.model';
 import { DistributedBy } from '../enums/distributed-by.enum';
 import { Wallet } from '../models/wallet.model';
 import { Goal } from '../models/goal.model';
+import { Transaction } from '../models/transaction.model';
 
 const TABLE_NAME = 'funddb';
 
@@ -10,14 +11,16 @@ export class IndexedDb extends Dexie {
   investments!: Table<Investment, number>;
   wallets!: Table<Wallet, number>;
   goals!: Table<Goal, number>;
+  transactions!: Table<Transaction, number>;
 
   constructor() {
     super(TABLE_NAME);
 
-    this.version(3).stores({
+    this.version(1).stores({
       investments: '++id',
       wallets: '++id',
-      goals: '++id'
+      goals: '++id',
+      transactions: '++id, goalId',
     });
 
     this.on('populate', () => this.populate());
@@ -49,13 +52,13 @@ export class IndexedDb extends Dexie {
       dcc: 'R$'
     });
 
-    await INDEXED_DB.goals.add({
-      currentAmount: 50,
+    var goalId = await INDEXED_DB.goals.add({
+      currentAmount: 0,
       completed: true,
-      deadLine: new Date(),
       name: 'Annual Saving',
       description: 'Description Test',
       startDate: new Date(),
+      deadLine: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
       totalCost: 2000
     });
   }

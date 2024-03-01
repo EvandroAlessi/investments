@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { InvestmentType } from '../../../enums/investment-type.enum';
-import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { INVESTMENT_TYPE_NAME } from '../../../constants/investment-name.const';
 import { InvestmentService } from '../../../services/investment.service';
 import { DistributedBy } from '../../../enums/distributed-by.enum';
 import { Subject } from 'rxjs';

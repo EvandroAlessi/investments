@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { InvestmentType } from '../../../enums/investment-type.enum';
 import { MatSort } from '@angular/material/sort';
-import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { INVESTMENT_TYPE_NAME } from '../../../constants/investment-name.const';
 import { InvestmentService } from '../../../services/investment.service';
 import { CurrencyService } from '../../../services/currency.service';
 import { DistributedBy } from '../../../enums/distributed-by.enum';

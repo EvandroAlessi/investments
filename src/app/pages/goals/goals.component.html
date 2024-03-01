@@ -1,7 +1,8 @@
 <mat-accordion *ngIf="goals">
     @for (goal of goals; track goal) {
-    <mat-expansion-panel class="goals-expansion-panel" [class.is-goal-completed]="goal.completed"
-        [expanded]="isEditing(goal.id)">
+    <mat-expansion-panel class="goal-expansion-panel" [class.is-goal-completed]="goal.completed"
+        [expanded]="isLastGoalCreated(goal.id) || true">
+
         <mat-expansion-panel-header>
             <mat-panel-title>
                 {{ goal.name }}
@@ -11,58 +12,99 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-form-field *ngIf="isEditing(goal.id)">
-            <mat-label>Name</mat-label>
-            <input matInput placeholder="Goal Name" [(ngModel)]="goal.name" autofocus>
-        </mat-form-field>
+        <mat-progress-bar *ngIf="!goal.completed" class="goal-progress" mode="buffer" [value]="getPercentage(goal)">
+        </mat-progress-bar>
 
-        <mat-form-field *ngIf="isEditing(goal.id)">
-            <mat-label>Description</mat-label>
-            <input matInput placeholder="Goal Description" [(ngModel)]="goal.description">
-        </mat-form-field>
+        <div class="goal-expansion-panel-body">
+            <div class="goal-fields">
+                <mat-form-field *ngIf="isEditing(goal.id) && !transaction">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Goal Name" [(ngModel)]="goal.name" autofocus>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Total Cost</mat-label>
-            <input matInput currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text"
-                [disabled]="!isEditing(goal.id)" matInput placeholder="0" [(ngModel)]="goal.totalCost">
+                <mat-form-field *ngIf="isEditing(goal.id) && !transaction">
+                    <mat-label>Description</mat-label>
+                    <input matInput placeholder="Goal Description" [(ngModel)]="goal.description">
+                </mat-form-field>
 
-            <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>
-        </mat-form-field>
+                <mat-form-field *ngIf="!isEditing(goal.id) && !transaction">
+                    <mat-label>Month Saving</mat-label>
+                    <input matInput currencyMask [options]="displayPriceOptions" type="text" [disabled]="true"
+                        placeholder="Month Saving" [value]="getMonthSaving(goal)">
 
-        <mat-form-field>
-            <mat-label>Current Amount</mat-label>
-            <input matInput currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text"
-                [disabled]="!isEditing(goal.id)" matInput placeholder="0" [(ngModel)]="goal.currentAmount">
+                    <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>
+                </mat-form-field>
 
-            <span matTextPrefix [ariaDisabled]="true">{{ wallet.dcc }}&nbsp;</span>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Total Cost</mat-label>
+                    <input matInput currencyMask [options]="displayPriceOptions" type="text"
+                        [disabled]="!isEditing(goal.id)" placeholder="0" [(ngModel)]="goal.totalCost">
 
-        <mat-form-field>
-            <mat-label>Start Date</mat-label>
-            <input [disabled]="!isEditing(goal.id)" matInput [matDatepicker]="startDatePicker"
-                [(ngModel)]="goal.startDate">
-            <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker></mat-datepicker>
-        </mat-form-field>
+                    <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>
+                </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Dead Line</mat-label>
-            <input [disabled]="!isEditing(goal.id)" matInput [matDatepicker]="deadLinePicker"
-                [(ngModel)]="goal.deadLine">
-            <mat-datepicker-toggle matIconSuffix [for]="deadLinePicker"></mat-datepicker-toggle>
-            <mat-datepicker #deadLinePicker></mat-datepicker>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Current Amount</mat-label>
+                    <input matInput currencyMask [options]="displayPriceOptions" type="text"
+                        [disabled]="!isEditing(goal.id)" placeholder="0" [ngModel]="goal.currentAmount" (ngModelChange)="updateCurrentAmout(goal, $event)">
 
-        @if (isEditing(goal.id)) {
-        <button mat-mini-fab matTooltip="Save Goal Details" class="save-goal" (click)="saveGoal(goal)">
-            <mat-icon>check</mat-icon>
-        </button>
-        } @else {
-        <button mat-mini-fab matTooltip="Edit Goal Details" color="primary" (click)="enableGoalEditing(goal.id)">
-            <mat-icon>edit</mat-icon>
-        </button>
-        }
+                    <span matTextPrefix [ariaDisabled]="true">{{ wallet.dcc }}&nbsp;</span>
+                </mat-form-field>
 
+                <mat-form-field *ngIf="!transaction">
+                    <mat-label>Start Date</mat-label>
+                    <input [disabled]="!isEditing(goal.id)" matInput [matDatepicker]="startDatePicker"
+                        [(ngModel)]="goal.startDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startDatePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="!transaction">
+                    <mat-label>Dead Line</mat-label>
+                    <input [disabled]="!isEditing(goal.id)" matInput [matDatepicker]="deadLinePicker"
+                        [(ngModel)]="goal.deadLine">
+                    <mat-datepicker-toggle matIconSuffix [for]="deadLinePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #deadLinePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="transaction">
+                    <mat-label>Transaction Value</mat-label>
+                    <input matInput currencyMask [options]="displayPriceOptions" type="text" placeholder="0"
+                        [(ngModel)]="transaction.transactionValue">
+
+                    <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>
+                    <mat-hint>Accept Negative Values</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="goal-actions">
+                @if (transaction) {
+
+                <button mat-icon-button matTooltip="Save Transaction" class="save-transaction"
+                    (click)="saveTransaction(goal)">
+                    <mat-icon>check</mat-icon>
+                </button>
+
+                } @else if (isEditing(goal.id)) {
+
+                <button mat-icon-button matTooltip="Save Goal" class="save-goal" (click)="saveGoal(goal)">
+                    <mat-icon>check</mat-icon>
+                </button>
+
+                } @else {
+
+                <button mat-icon-button matTooltip="Edit Goal" (click)="enableGoalEditing(goal.id)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+
+                <button mat-icon-button matTooltip="Add Transaction" color="primary"
+                    (click)="createTransaction(goal.id)">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                }
+            </div>
+        </div>
     </mat-expansion-panel>
     }
 </mat-accordion>

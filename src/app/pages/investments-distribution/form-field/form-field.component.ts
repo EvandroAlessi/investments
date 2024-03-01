@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { INVESTMENT_TYPE_NAME } from '../../../constants/investment-name.const';
 import { InvestmentType } from '../../../enums/investment-type.enum';
 import { InvestmentService } from '../../../services/investment.service';
 import { CurrencyService } from '../../../services/currency.service';
@@ -7,6 +7,7 @@ import { DistributedBy } from '../../../enums/distributed-by.enum';
 import { Observable } from 'rxjs';
 import { WalletService } from 'src/app/services/wallet.service';
 import { Wallet } from 'src/app/models/wallet.model';
+import { DISPLAY_PRICE_OPTIONS } from 'src/app/constants/display-price-options.constant';
 
 @Component({
   selector: 'investments-form-field',
@@ -14,6 +15,7 @@ import { Wallet } from 'src/app/models/wallet.model';
   styleUrls: ['./form-field.component.scss']
 })
 export class FormFieldComponent implements OnInit {
+  displayPriceOptions = DISPLAY_PRICE_OPTIONS;
   wallet: Wallet = {
     availableFund: 0,
     dcc: 'R$'

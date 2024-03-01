@@ -3,7 +3,7 @@
         <mat-label>{{ investmentTypeName }}</mat-label>
 
         <input matInput currencyMask [ngModel]="investmentDistributionByType" (ngModelChange)="updateInputValue($event)"
-            name='{{investmentType}}' [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text"
+            name='{{investmentType}}' [options]="displayPriceOptions" type="text"
             placeholder="0" onfocus="this.select()">
 
         <span matTextPrefix>{{ wallet.dcc }}&nbsp;</span>

@@ -15,6 +15,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { Wallet } from 'src/app/models/wallet.model';
 import { WalletService } from 'src/app/services/wallet.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DISPLAY_PRICE_OPTIONS } from 'src/app/constants/display-price-options.constant';
+import { Transaction } from 'src/app/models/transaction.model';
+import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
   selector: 'investments-goals',
@@ -36,9 +40,11 @@ import { WalletService } from 'src/app/services/wallet.service';
     MatIconModule,
     MatTooltipModule,
     CurrencyMaskModule,
+    MatProgressBarModule
   ]
 })
 export class GoalsComponent implements OnInit {
+  displayPriceOptions = DISPLAY_PRICE_OPTIONS;
   goals: Goal[] | undefined;
   editingList: { key: number, value: boolean; }[] = [];
   wallet: Wallet = {
@@ -46,9 +52,13 @@ export class GoalsComponent implements OnInit {
     dcc: 'R$'
   };
 
+  lastGoalCreated: number | undefined;
+  transaction: Transaction | undefined;
+
   constructor(private goalService: GoalService,
     private synchronyService: SynchronyService,
-    private walletService: WalletService) { }
+    private walletService: WalletService,
+    private transactionService: TransactionService) { }
 
   async ngOnInit(): Promise<void> {
     await Promise.all([
@@ -62,6 +72,10 @@ export class GoalsComponent implements OnInit {
   }
 
   isEditing(goalId: number | undefined): boolean {
+    if (this.lastGoalCreated == goalId) {
+      return true;
+    }
+
     return this.editingList.find(x => x.key == goalId)?.value
       ?? false;
   }
@@ -83,10 +97,89 @@ export class GoalsComponent implements OnInit {
 
     this.goals?.push(goal);
 
-    this.setIsGoalEditing(goal.id, true);
+    this.lastGoalCreated = goal.id;
+  }
+
+  isLastGoalCreated(goalId: number | undefined): boolean {
+    return this.lastGoalCreated == goalId;
+  }
+
+  getPercentage(goal: Goal): number {
+    if (goal.completed) {
+      return 100;
+    }
+
+    if (goal.totalCost == 0) {
+      return 0;
+    }
+
+    return ~~(goal.currentAmount / goal.totalCost * 100);
+  }
+
+  getMonthSaving(goal: Goal): string {
+    var monthDiff = goal.deadLine.getMonth() - goal.startDate.getMonth() +
+      (12 * (goal.deadLine.getFullYear() - goal.startDate.getFullYear()));
+
+    var value = (goal.totalCost / monthDiff).toFixed(2);
+
+    return value
+      .replaceAll(',', '')
+      .replaceAll('.', ','); // To R$
+  }
+
+  updateCurrentAmout(goal: Goal, currentAmount: number) {
+    if (goal.currentAmount === currentAmount) {
+      return;
+    }
+
+    this.createTransaction(goal.id);
+
+    if (!this.transaction) {
+      return;
+    }
+
+    if (goal.currentAmount < currentAmount) {
+      this.transaction.transactionValue = currentAmount - goal.currentAmount;
+    } else {
+      this.transaction.transactionValue = goal.currentAmount - currentAmount;
+    }
+
+    this.saveTransaction(goal);
+  }
+
+  async addTransactionToCurrentAmout(goal: Goal, transactionValue: number): Promise<void> {
+    goal.currentAmount += transactionValue;
+
+    goal.completed = goal.currentAmount >= goal.totalCost;
+
+    this.goalService.updateGoal(goal, goal.id!);
+  }
+
+  createTransaction(goalId: number | undefined): void {
+    this.transaction = {
+      goalId: goalId,
+      trasactionDate: new Date(),
+      transactionValue: 0
+    };
+  }
+
+  async saveTransaction(goal: Goal): Promise<void> {
+    if (!this.transaction) {
+      return;
+    }
+
+    await this.transactionService.createTransaction(this.transaction);
+
+    await this.addTransactionToCurrentAmout(goal, this.transaction.transactionValue);
+
+    this.transaction = undefined;
   }
 
   private setIsGoalEditing(goalId: number | undefined, isEditing: boolean): void {
+    if (this.lastGoalCreated == goalId) {
+      this.lastGoalCreated = undefined;
+    }
+
     const isGoalEditing = this.editingList.find(x => x.key == goalId);
 
     if (isGoalEditing) {
@@ -111,6 +204,6 @@ export class GoalsComponent implements OnInit {
   }
 
   private sortGoals() {
-    this.goals?.sort((goalA, goalB) => Number(goalA.completed) - Number(goalB.completed));
+    this.goals?.sort((goalA, goalB) => Number(goalB.completed) - Number(goalA.completed));
   }
 }

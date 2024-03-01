@@ -13,7 +13,7 @@ import {
   ApexLegend,
   ChartType
 } from "ng-apexcharts";
-import { INVESTMENT_TYPE_NAME } from '../../../consts/investment-name.const';
+import { INVESTMENT_TYPE_NAME } from '../../../constants/investment-name.const';
 import { InvestmentType } from '../../../enums/investment-type.enum';
 import { DistributedBy } from '../../../enums/distributed-by.enum';
 import { InvestmentService } from '../../../services/investment.service';

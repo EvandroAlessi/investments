@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { WalletService } from 'src/app/services/wallet.service';
 import { Wallet } from 'src/app/models/wallet.model';
 import { SynchronyService } from 'src/app/services/synchrony.service';
+import { DISPLAY_PRICE_OPTIONS } from 'src/app/constants/display-price-options.constant';
 
 @Component({
   selector: 'investments-fund',
@@ -9,6 +10,7 @@ import { SynchronyService } from 'src/app/services/synchrony.service';
   styleUrls: ['./fund.component.scss']
 })
 export class FundComponent implements OnInit {
+  displayPriceOptions = DISPLAY_PRICE_OPTIONS;
   wallet: Wallet = {
     availableFund: 0,
     dcc: 'R$'
